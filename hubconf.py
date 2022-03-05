@@ -1,4 +1,4 @@
-dependencies = ['torch', 'torchaudio', 'librosa', 'numpy', 'omegaconf']
+dependencies = ['torch', 'torchaudio', 'numpy', 'omegaconf']
 
 from convrnn_classifier import ConvRNNClassifier, ConvRNNConfig
 from train import TrainConfig, DistributedConfig
