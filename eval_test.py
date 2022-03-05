@@ -57,7 +57,7 @@ def strip_checkpoint(ckpt_path):
     del ckpt['scheduler_state_dict']
     del ckpt['scaler_state_dict']
     p = Path(ckpt_path)
-    po = p.parent/f"{p.stem}-slip.pt"
+    po = p.parent/f"{p.stem}-slim.pt"
     torch.save(ckpt, po)
     print("Saved stripped checkpoint to ", str(po))
 

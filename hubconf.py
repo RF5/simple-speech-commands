@@ -22,10 +22,11 @@ def convgru_classifier(pretrained=True, progress=True, device='cuda'):
         progress (bool): show progress bar when downloading model
         device (str): device to load model onto ('cuda' or 'cpu' are common choices)
     """
-    ckpt = torch.hub.load_state_dict_from_url("TODO", 
+    ckpt = torch.hub.load_state_dict_from_url("https://github.com/RF5/simple-speech-commands/releases/download/v0.5/ckpt_00020000-slim.pt", 
                                             progress=progress, map_location=device)
+    
     cfg = OmegaConf.create(ckpt['cfg_yaml'])
-    model = ConvRNNClassifier(cfg)
+    model = ConvRNNClassifier(cfg.model_cfg)
     if pretrained:
         model.load_state_dict(ckpt['model_state_dict'])
     model.classes = classes
