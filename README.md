@@ -24,7 +24,7 @@ No repository cloning or downloading notebooks needed! To perform inference with
         logits = model(x, x_lens)[0] 
         # logits is a (n_classes,) vector of logits
     
-    probabilities = logits.softmax()
+    probabilities = logits.softmax(dim=-1)
     # now probabilities[i] is the predicted probability of class[i]
     predicted_class = model.classes[int(probabilities.argmax())] # e.g. "three"
     ```
