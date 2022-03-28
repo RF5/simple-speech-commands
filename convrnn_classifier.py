@@ -87,7 +87,7 @@ class ConvRNNClassifier(nn.Module):
         )
         self.cfg = cfg
 
-    def forward(self, x, input_lengths):
+    def forward(self, x, input_lengths, return_features=False):
         """ 
         Takes in a set of waveforms of shape (batch, samples) 
         and associated waveform lengths (batch)
@@ -110,5 +110,7 @@ class ConvRNNClassifier(nn.Module):
         out_reverse = outputs[:, 0, self.rnn_dim:]
         out_reduced = torch.cat((out_forward, out_reverse), dim=1)
         pred = self.head(out_reduced) # (bs, n_classes)
+        if return_features:
+            return pred, out_reduced
         return pred
 
