@@ -1,5 +1,5 @@
 # simple speech commands
-A pretrained Pytorch classifier for the Google Speech Commands dataset that is very quick to set up and use.
+A pretrained Pytorch classifier for the Google Speech Commands dataset (and the digit subset) that is very quick to set up and use.
 
 ## What?
 The [Google Speech Commands](https://arxiv.org/abs/1804.03209) dataset is a 16kHz audio dataset of 1s clips of people saying 1 of 35 possible words, which act as classes in a classification task. 
@@ -15,6 +15,7 @@ No repository cloning or downloading notebooks needed! To perform inference with
     import torchaudio
     
     model = torch.hub.load('RF5/simple-speech-commands', 'convgru_classifier')
+    # or 'convgru_classifier_sc09' if you want the classifier only trained on the 10 digits
     model.eval()
 
     x, _ = torchaudio.load("<path to 16kHz audio file>.wav") # x has shape (1, T)
@@ -34,20 +35,21 @@ No repository cloning or downloading notebooks needed! To perform inference with
 Trivial!
 
 ## Model
-The model is defind in `convrnn_classifier.py` and it consists of an initial convolutional encoder (very similar to that used by wav2vec 2.0 or [HuBERT](https://github.com/pytorch/fairseq/tree/main/examples/hubert)) into a 3-layer, 768-hidden-dimensional GRU. 
-The output of the final GRU layer is fed into a final linear layer to yield the logits over the 35 classes. 
+The model is defined in `convrnn_classifier.py` and it consists of an initial convolutional encoder (very similar to that used by wav2vec 2.0 or [HuBERT](https://github.com/pytorch/fairseq/tree/main/examples/hubert)) into a 3-layer, 768-hidden-dimensional GRU. 
+The output of the final GRU layer is fed into a final linear layer to yield the logits over the 35 classes (or 10 classes for the digits subset). 
 
 The ConvGRU model only assumes that any input waveform are floating point numbers between -1.0 and 1.0 sampled at 16kHz. You may wish to normalize the volume to ensure very soft audio is scaled up, but it is not strictly necessary and performance will still be good.
 
-The checkpoint is directly available under the releases tab. 
+Two checkpoints are available under the releases tab -- one model trained on all 35 words (`convgru_classifier`), and another trained on the 10 digits subset -- i.e. it is trained to only classify an utterance as saying one of the ten possible digits (`convgru_classifier_sc09`). 
 
 ## Performance
 
-The model is evaluated on the official validation and test sets of the Google Speech Commands dataset. We report accuracies on these below:
+The models are evaluated on the official validation and test sets of the Google Speech Commands dataset. We report accuracies on these below:
 
-| model | valid set accuracy | test set accuracy |
-| ----------- | :-----------: | :----: |
-| `convgru_classifier` | 92.7% | 92.0% |
+| model | dataset | valid set accuracy | test set accuracy |
+| ----------- | --- | :-----------: | :----: |
+| `convgru_classifier`| Speech Commands full dataset | 92.7% | 92.0% |
+| `convgru_classifier_sc09` | Speech Commands digits (SC09) subset | 97.5% | 96.7% |
 
 
 ## Training
@@ -56,7 +58,7 @@ It uses `omegaconf` to manage config option and needs the additional dependencie
 To see all training configuration options, see `python train.py --help`. All config options can be overridden/specified with command line options. 
 
 To repeat the training with default parameters:
-1. Construct training, validation, and testing csv files with `split_data.py`. Simply run `python split_data.py --root_path <path to google speech command dataset directory>` . This will produce csv files of format: `path,label` containing the file path and class label of each utterance in the set. 
+1. Construct training, validation, and testing csv files with `split_data.py`. Simply run `python split_data.py --root_path <path to google speech command dataset directory>` . This will produce csv files of format: `path,label` containing the file path and class label of each utterance in the set. There is also an optional CLI argument to use the SC09 digits subset, if you wish to train a model on the just classifying the 10 digits.
 2. Run:
    ```
     python train.py checkpoint_path=runs/run1 train_csv=splits/train.csv

@@ -146,7 +146,8 @@ def train(rank, cfg: TrainConfig):
 
     train_sampler = DistributedSampler(trainset) if cfg.distributed.n_gpus_per_node*cfg.distributed.n_nodes > 1 else None
 
-    train_loader = DataLoader(trainset, num_workers=cfg.num_workers, shuffle=False,
+    train_loader = DataLoader(trainset, num_workers=cfg.num_workers, 
+                              shuffle=False if cfg.distributed.n_gpus_per_node*cfg.distributed.n_nodes > 1 else True,
                               sampler=train_sampler,
                               batch_size=cfg.batch_size,
                               pin_memory=False,
@@ -182,8 +183,9 @@ def train(rank, cfg: TrainConfig):
     
     if rank == 0: 
         mb = master_bar(range(max(0, last_epoch), cfg.n_epochs))
+        sw.add_text('config', '```\n' + OmegaConf.to_yaml(cfg) + '\n```', global_step=steps)
         smooth_loss = None
-    else: mb = range(max(0, last_epoch), cfg.n_epochs)
+    else: mb = range(max(0, last_epoch), cfg.n_epochs)    
 
     for epoch in mb:
         if rank == 0:
@@ -263,6 +265,7 @@ def train(rank, cfg: TrainConfig):
                     with torch.no_grad():
                         for j, batch in progress_bar(enumerate(validation_loader), total=len(validation_loader), parent=mb):
                             x, xlen, lbls = batch
+                            
                             lbls = lbls.to(device)
                             logits = model(x.to(device), xlen.to(device))
                             val_err_tot += loss_fn(logits, lbls)
