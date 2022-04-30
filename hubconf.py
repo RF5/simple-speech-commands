@@ -47,7 +47,7 @@ def convgru_classifier_sc09(pretrained=True, progress=True, device='cuda'):
         progress (bool): show progress bar when downloading model
         device (str): device to load model onto ('cuda' or 'cpu' are common choices)
     """
-    ckpt = torch.hub.load_state_dict_from_url("https://github.com/RF5/simple-speech-commands/releases/download/v0.6/ckpt_00047500-slim.pt", 
+    ckpt = torch.hub.load_state_dict_from_url("https://github.com/RF5/simple-speech-commands/releases/download/v0.6/ckpt_00035000-slim.pt", 
                                             progress=progress, map_location=device)
     
     cfg = OmegaConf.create(ckpt['cfg_yaml'])
