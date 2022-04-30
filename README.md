@@ -49,7 +49,7 @@ The models are evaluated on the official validation and test sets of the Google 
 | model | dataset | valid set accuracy | test set accuracy |
 | ----------- | --- | :-----------: | :----: |
 | `convgru_classifier`| Speech Commands full dataset | 92.7% | 92.0% |
-| `convgru_classifier_sc09` | Speech Commands digits (SC09) subset | 97.5% | 96.7% |
+| `convgru_classifier_sc09` | Speech Commands digits (SC09) subset | 97.4% | 96.5% |
 
 
 ## Training
