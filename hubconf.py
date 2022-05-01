@@ -35,7 +35,7 @@ def convgru_classifier(pretrained=True, progress=True, device='cuda'):
 
 classes_sc09 = ['eight', 'five', 'four', 'nine', 'one', 'seven', 'six', 'three', 'two', 'zero']
 
-def convgru_classifier_sc09(pretrained=True, progress=True, device='cuda'):
+def convgru_classifier_sc09(pretrained=True, progress=True, device='cuda', type='best'):
     r""" 
     GRU classifier model trained Google Speech Commands digits dataset (SC09).
     Model takes in 16kHz raw waveform with samples in the range of [-1, 1].
@@ -46,8 +46,13 @@ def convgru_classifier_sc09(pretrained=True, progress=True, device='cuda'):
         pretrained (bool): load pretrained weights into the model
         progress (bool): show progress bar when downloading model
         device (str): device to load model onto ('cuda' or 'cpu' are common choices)
+        type (str): whether to load the "best" checkpoint (lowest validation loss, default), or "last" checkpoint (35k iters).
     """
-    ckpt = torch.hub.load_state_dict_from_url("https://github.com/RF5/simple-speech-commands/releases/download/v0.6/ckpt_00035000-slim.pt", 
+    if type == 'best':
+        ckpt = torch.hub.load_state_dict_from_url("https://github.com/RF5/simple-speech-commands/releases/download/v0.6/ckpt_lowest_validation_00007500-slim.pt", 
+                                            progress=progress, map_location=device)
+    else:
+        ckpt = torch.hub.load_state_dict_from_url("https://github.com/RF5/simple-speech-commands/releases/download/v0.6/ckpt_00035000-slim.pt", 
                                             progress=progress, map_location=device)
     
     cfg = OmegaConf.create(ckpt['cfg_yaml'])

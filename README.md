@@ -16,6 +16,10 @@ No repository cloning or downloading notebooks needed! To perform inference with
     
     model = torch.hub.load('RF5/simple-speech-commands', 'convgru_classifier')
     # or 'convgru_classifier_sc09' if you want the classifier only trained on the 10 digits
+    # for 'convgru_classifier_sc09' you can load either the last checkpoint 
+    #   model = torch.hub.load('RF5/simple-speech-commands', 'convgru_classifier_sc09', type='last')
+    # or the best checkpoint (default)
+    #   model = torch.hub.load('RF5/simple-speech-commands', 'convgru_classifier_sc09', type='best')
     model.eval()
 
     x, _ = torchaudio.load("<path to 16kHz audio file>.wav") # x has shape (1, T)
@@ -49,7 +53,8 @@ The models are evaluated on the official validation and test sets of the Google 
 | model | dataset | valid set accuracy | test set accuracy |
 | ----------- | --- | :-----------: | :----: |
 | `convgru_classifier`| Speech Commands full dataset | 92.7% | 92.0% |
-| `convgru_classifier_sc09` | Speech Commands digits (SC09) subset | 97.4% | 96.5% |
+| `convgru_classifier_sc09` (best validation loss) | Speech Commands digits (SC09) subset | 96.6% | 96.1% |
+| `convgru_classifier_sc09` (last) | Speech Commands digits (SC09) subset | 97.4% | 96.5% |
 
 
 ## Training
