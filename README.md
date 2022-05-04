@@ -55,7 +55,9 @@ The models are evaluated on the official validation and test sets of the Google 
 | `convgru_classifier`| Speech Commands full dataset | 92.7% | 92.0% |
 | `convgru_classifier_sc09` (best validation loss) | Speech Commands digits (SC09) subset | 96.6% | 96.1% |
 | `convgru_classifier_sc09` (last) | Speech Commands digits (SC09) subset | 97.4% | 96.5% |
+| `resnext_classifier_sc09` | Speech Commands digits (SC09) subset | 98.7% | 98.1% |
 
+For more details on each model, checkout `hubconf.py`. 
 
 ## Training
 If you wish to train your own model, use the `train.py` script. 
