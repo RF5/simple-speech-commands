@@ -1,8 +1,5 @@
 dependencies = ['torch', 'torchaudio', 'numpy', 'omegaconf']
 
-from dis import pretty_flags
-from msilib.schema import ProgId
-from random import paretovariate
 from convrnn_classifier import ConvRNNClassifier, ConvRNNConfig
 from train import TrainConfig, DistributedConfig
 from sc09_resnext import ResNextWrapper
