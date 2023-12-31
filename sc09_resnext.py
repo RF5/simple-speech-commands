@@ -157,7 +157,7 @@ class ResNextWrapper(nn.Module):
         in_device = x.device
         for i in range(N):
             stft = librosa.stft(x[i].cpu().numpy(), n_fft=n_fft, hop_length=hop_length)
-            mel_basis = librosa.filters.mel(self.sample_rate, n_fft, n_mels)
+            mel_basis = librosa.filters.mel(sr=self.sample_rate, n_fft=n_fft, n_mels=n_mels)
             s = np.dot(mel_basis, np.abs(stft)**2.0)
             mel_spectrogram = librosa.power_to_db(s, ref=np.max)
             mel = torch.from_numpy(mel_spectrogram).to(in_device)
